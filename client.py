@@ -1,6 +1,6 @@
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives import serialization, hashes, padding
 from dotenv import load_dotenv
 
 # Load the environment variables
@@ -27,7 +27,7 @@ def serialize_public_key(public_key):
 
 # The following function deals with the saving of the private key to a file
 def save_private_key(private_key, filename, password):
-    with open(filename, "wb") as key_file:
+    with open(filename + "_private_key", "wb") as key_file:
         key_file.write(
             private_key.private_bytes(
                 encoding = serialization.Encoding.PEM,
@@ -36,10 +36,21 @@ def save_private_key(private_key, filename, password):
             )
         )
 
+# The following function deals with the saving of the public key to a file
 def save_public_key(public_key, filename):
-    with open(filename, "wb") as key_file:
+    with open(filename + "_public_key", "wb") as key_file:
         key_file.write(public_key.public_bytes(
             encoding = serialization.Encoding.PEM,
             format = serialization.PublicFormat.SubjectPublicKeyInfo
         ))
 
+# The following function deals with the encryption of a message
+def encrypt_message(message, recipient_public_key):
+    return recipient_public_key.encrypt(
+        message.encode('utf-8'),
+        padding.OAEP(
+            mgf = padding.MGF1(algorithm = hashes.SHA256()),
+            algorithm = hashes.SHA256(),
+            label = None
+        )
+    )
