@@ -54,3 +54,14 @@ def encrypt_message(message, recipient_public_key):
             label = None
         )
     )
+
+# The following function deals with the decryption of a message
+def decrypt_message(message, recipient_private_key):
+    return recipient_private_key.decrypt(
+        message,
+        padding.OAEP(
+            mgf = padding.MGF1(algorithm = hashes.SHA256()),
+            algorithm = hashes.SHA256(),
+            label = None
+        )
+    )
