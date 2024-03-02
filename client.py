@@ -21,7 +21,7 @@ def serialize_public_key(public_key):
         format = serialization.PublicFormat.SubjectPublicKeyInfo
     )
 
-# The following function deals with the saving of the public key to a file
+# The following function deals with the saving of the private key to a file
 def save_private_key(private_key, filename, password):
     with open(filename, "wb") as key_file:
         key_file.write(
@@ -31,3 +31,10 @@ def save_private_key(private_key, filename, password):
                 encryption_algorithm = serialization.BestAvailableEncryption(password)
             )
         )
+
+def save_public_key(public_key, filename):
+    with open(filename, "wb") as key_file:
+        key_file.write(public_key.public_bytes(
+            encoding = serialization.Encoding.PEM,
+            format = serialization.PublicFormat.SubjectPublicKeyInfo
+        ))
