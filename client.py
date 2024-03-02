@@ -38,3 +38,4 @@ def save_public_key(public_key, filename):
             encoding = serialization.Encoding.PEM,
             format = serialization.PublicFormat.SubjectPublicKeyInfo
         ))
+
